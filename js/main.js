@@ -10,6 +10,8 @@ let scatter_points = {
     marker: {
         size: 25,
     },
+    hoverinfo: "x+y+text",
+    hovertemplate: '%{y}, %{text}<br>Rate: %{x}<extra></extra>'
 };
 
 let data = [scatter_points];
@@ -30,8 +32,8 @@ let layout = {
         {
             type: 'rect',
             xref: 'x',
-            x0: 1e5,
-            x1: 1e7,
+            x0: 2e5,
+            x1: 5e7,
             yref: 'paper',
             y0: 0,
             y1: 1,
@@ -42,9 +44,11 @@ let layout = {
             },
             layer: 'below',
         },
-    ]
+    ],
+    hovermode: 'closest'
 }
 
 Plotly.newPlot('merger_rate', data, layout, {
-    displayModeBar: false
+    displayModeBar: false,
+    responsive: true,
 });
