@@ -1,3 +1,5 @@
+// this will eventually loop over some sort of CSV file or something
+// need to work out structure and stuff
 
 let scatter_points = {
     x: [1e2, 1e10, 64.27e4],
@@ -6,7 +8,7 @@ let scatter_points = {
     mode: 'markers',
     type: 'scatter',
     marker: {
-        size: 15,
+        size: 25,
     },
 };
 
@@ -23,6 +25,26 @@ let layout = {
     margin: {
         l: 150
     },
+    shapes: [
+        // 1st highlight during Feb 4 - Feb 6
+        {
+            type: 'rect',
+            xref: 'x',
+            x0: 1e5,
+            x1: 1e7,
+            yref: 'paper',
+            y0: 0,
+            y1: 1,
+            fillcolor: '#d3d3d3',
+            opacity: 0.3,
+            line: {
+                width: 0
+            },
+            layer: 'below',
+        },
+    ]
 }
 
-Plotly.newPlot('merger_rate', data, layout);
+Plotly.newPlot('merger_rate', data, layout, {
+    displayModeBar: false
+});
