@@ -1,10 +1,24 @@
+window.addEventListener("load", function () {
+    document.querySelectorAll(".basic-info").forEach(el => {
+        el.querySelector("a").addEventListener("click", function () {
+            el.parentElement.querySelector(".more-info").classList.toggle("active");
+        });
+
+    });
+});
+
+
 // this will eventually loop over some sort of CSV file or something
 // need to work out structure and stuff
 
+let rates = [1e2, 1e10, 64.27e4, 1e5]
+let papers = ["Broekgaarden (2021)", "Broekgaarden (2021)", "Broekgaarden (2021)", "Tom"]
+let models = ["Model A", "Model B", "Model C", "A tom model"]
+
 let scatter_points = {
-    x: [1e2, 1e10, 64.27e4],
-    y: ["Broekgaarden (2021)", "Broekgaarden (2021)", "Broekgaarden (2021)"],
-    text: ["Model A", "Model B", "Model C"],
+    x: rates,
+    y: papers,
+    text: models,
     mode: 'markers',
     type: 'scatter',
     marker: {
@@ -14,7 +28,42 @@ let scatter_points = {
     hovertemplate: '%{y}, %{text}<br>Rate: %{x}<extra></extra>'
 };
 
-let data = [scatter_points];
+let data = [];
+
+let unique_papers = [...new Set(papers)]
+
+let min_maxes = Array(2 * unique_papers.length).fill(0.0);
+let min_max_papers = Array(2 * unique_papers.length)
+
+let mins = [];
+let maxes = [];
+for (let i = 0; i < unique_papers.length; i++) {
+    console.log(unique_papers[i / 2]);
+    mask = papers.map(item => item == unique_papers[i])
+    matching_rates = rates.filter((item, j) => mask[j])
+
+    let x = [0, 0];
+    if (matching_rates.length == 1) {
+        x[0] = matching_rates[0];
+        x[1] = matching_rates[0];
+    } else {
+        x[0] = Math.min(...matching_rates);
+        x[1] = Math.max(...matching_rates);
+    }
+
+    let ranges = {
+        x: x,
+        y: [unique_papers[i], unique_papers[i]],
+        mode: 'lines',
+        type: 'scatter',
+        hoverinfo: 'none',
+        line: {
+            width: 10,
+        }
+    }
+    data.push(ranges);
+}
+data.push(scatter_points)
 
 let layout = {
     xaxis: {
@@ -45,7 +94,8 @@ let layout = {
             layer: 'below',
         },
     ],
-    hovermode: 'closest'
+    hovermode: 'closest',
+    showlegend: false,
 }
 
 Plotly.newPlot('merger_rate', data, layout, {

@@ -1,0 +1,13 @@
+.more-info {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 1s ease-in-out;
+}
+
+.more-info.active {
+    max-height: 500px;
+}
+
+p, h1 {
+    margin: 0;
+}
